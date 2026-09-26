@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it using these metadata."
 title: "hbs-state: index guard for stateful hash-based signatures (XMSS/XMSS^MT)"
-abstract: "Index guard for stateful hash-based signatures (XMSS/XMSS^MT): a monotonic counter persisted with fsync, detection of storage that does not actually persist, and reconciliation of the state after a restart. Reference implementation of HBS-STATE. Licensing: this field records a single identifier, and this artifact carries three. The code is available under MIT OR Apache-2.0, at the recipient's option, and the specification vectors under CC0-1.0. The LICENSE-MIT, LICENSE-APACHE and spec/LICENSE-CC0 files are authoritative."
+abstract: "Index guard for stateful hash-based signatures (XMSS/XMSS^MT): a monotonic counter persisted with fsync, detection of storage that does not actually persist, and reconciliation of the state after a restart. Reference implementation of HBS-STATE. Licensing: the code is available under MIT OR Apache-2.0, at the recipient's option; the specification vectors are under CC0-1.0, which the license field cannot express because it assumes an OR relationship over the whole work. The LICENSE-MIT, LICENSE-APACHE and spec/LICENSE-CC0 files are authoritative."
 type: software
 authors:
   - family-names: "Toranzo Portela"
@@ -9,7 +9,9 @@ authors:
     orcid: "https://orcid.org/0009-0009-3199-1664"
 version: 0.1.0
 date-released: "2026-09-26"
-license: MIT
+license:
+  - MIT
+  - Apache-2.0
 repository-code: "https://github.com/atoranzo/hbs-state"
 doi: 10.5281/zenodo.22980547
 keywords:
