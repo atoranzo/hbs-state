@@ -2,7 +2,7 @@
   "upload_type": "software",
   "title": "hbs-state: index guard for stateful hash-based signatures (XMSS/XMSS^MT)",
   "version": "0.1.0",
-  "license": "MIT",
+  "license": "mit",
   "creators": [
     {
       "name": "Toranzo Portela, Ángel José",
