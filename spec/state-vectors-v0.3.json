@@ -1,0 +1,375 @@
+{
+  "schema": "hbs-state/0.3",
+  "title": "State reconciliation vectors for stateful hash-based signatures",
+  "changes_since_0_1": [
+    "the FIVE DEDUCED rows become MEASURED: resolved against the source",
+    "the 'sk_model' axis is born: the subject DECLARES whether it persists the SK or derives it from a seed",
+    "B7 is BOUNDED: its ceiling belongs to the FIELD, and coincides with the TREE's only if h is a multiple of 8",
+    "B8 CANDIDATE is born (h not a multiple of 8), and candidate family C"
+  ],
+  "reference_parameter_set": {
+    "name": "XMSSMT-SHA2_40/8_256",
+    "sp800_208_identifier": "0x00000005",
+    "h": 40,
+    "d": 8,
+    "n": 32,
+    "w": 16,
+    "len": 67,
+    "sk_bytes": 137,
+    "sk_layout": "OID(4) + index(width, big-endian) + 4*n",
+    "index_width": 5,
+    "index_width_formula": "ceil(h/8)",
+    "max_index": 1099511627775
+  },
+  "sk_model": {
+    "question": "after a restart, where does the index carried by the private key come from",
+    "values": [
+      "persisted",
+      "seed_derived"
+    ],
+    "declaration_required": true,
+    "persisted": {
+      "reachable_after_restart": [
+        "InSync",
+        "CounterAhead",
+        "KeyAhead"
+      ],
+      "example": "RustCrypto's xmss: serialises the state into the caller's bytes"
+    },
+    "seed_derived": {
+      "reachable_after_restart": [
+        "KeyAtZero"
+      ],
+      "note": "CounterAhead only happens INTRA-PROCESS; from_seed returns index 0",
+      "example": "the ARQUEO index guard"
+    },
+    "consequence": "a seed-derived implementation that never produces CounterAhead after a restart is NOT incomplete"
+  },
+  "states": [
+    {
+      "name": "InSync",
+      "condition": "key == counter",
+      "fields": [
+        "index"
+      ],
+      "index": "counter",
+      "fatal": false
+    },
+    {
+      "name": "CounterAhead",
+      "condition": "counter > key and key != 0",
+      "fields": [
+        "counter",
+        "key",
+        "orphans"
+      ],
+      "orphans": "counter - key",
+      "fatal": false,
+      "intra_process_only_if": "sk_model == seed_derived"
+    },
+    {
+      "name": "KeyAtZero",
+      "condition": "counter > key and key == 0",
+      "fields": [
+        "counter",
+        "indeterminate"
+      ],
+      "indeterminate": "counter",
+      "fatal": false,
+      "precedence": "MEASURED: guard `Greater if key == 0` before the general arm"
+    },
+    {
+      "name": "KeyAhead",
+      "condition": "key > counter",
+      "fields": [
+        "counter",
+        "key",
+        "unrecorded"
+      ],
+      "unrecorded": "key - counter",
+      "fatal": true,
+      "cause": "the order was inverted, or fsync lied"
+    }
+  ],
+  "reference_implementation": "a THREE-arm match on counter.cmp(&key) with ONE guard",
+  "indistinguishability": "with counter 1 and key 0, dying inside the reserve window and dying after signing leave the SAME state on disk",
+  "cost_of_reuse": "QRL curve: at the second reuse, on the order of 2^34 hashes",
+  "judge": {
+    "fatal_if": "KeyAhead",
+    "and_only_if": true
+  },
+  "levels": {
+    "N0": "declares its sk_model",
+    "N1": "classifies the four",
+    "N2": "gets the derived fields right",
+    "N3": "refuses to operate on KeyAhead, and only there"
+  },
+  "reconciliation": [
+    {
+      "id": "A1",
+      "counter": 0,
+      "key": 0,
+      "state": "InSync",
+      "derived": {
+        "index": 0
+      },
+      "fatal": false,
+      "provenance": "MEASURED",
+      "note": "lower edge: everything at zero",
+      "resolved_in": "v0.2",
+      "source": "cmp gives Equal for (0,0)"
+    },
+    {
+      "id": "A2",
+      "counter": 7,
+      "key": 7,
+      "state": "InSync",
+      "derived": {
+        "index": 7
+      },
+      "fatal": false,
+      "provenance": "MEASURED",
+      "note": "guardian/lib.rs:386 via no_admite_matiz"
+    },
+    {
+      "id": "A3",
+      "counter": 2,
+      "key": 2,
+      "state": "InSync",
+      "derived": {
+        "index": 2
+      },
+      "fatal": false,
+      "provenance": "MEASURED",
+      "note": "guardian/lib.rs:562 after two reservations"
+    },
+    {
+      "id": "A4",
+      "counter": 7,
+      "key": 5,
+      "state": "CounterAhead",
+      "derived": {
+        "orphans": 2
+      },
+      "fatal": false,
+      "provenance": "MEASURED",
+      "note": "guardian/lib.rs:598 -- the normal case"
+    },
+    {
+      "id": "A5",
+      "counter": 9,
+      "key": 7,
+      "state": "CounterAhead",
+      "derived": {
+        "orphans": 2
+      },
+      "fatal": false,
+      "provenance": "MEASURED",
+      "note": "guardian/lib.rs:387"
+    },
+    {
+      "id": "A6",
+      "counter": 1,
+      "key": 0,
+      "state": "KeyAtZero",
+      "derived": {
+        "indeterminate": 1
+      },
+      "fatal": false,
+      "provenance": "MEASURED",
+      "note": "minimum key-at-zero",
+      "resolved_in": "v0.2",
+      "source": "guard Greater if key==0"
+    },
+    {
+      "id": "A7",
+      "counter": 5,
+      "key": 0,
+      "state": "KeyAtZero",
+      "derived": {
+        "indeterminate": 5
+      },
+      "fatal": false,
+      "provenance": "MEASURED",
+      "note": "guardian/lib.rs:392"
+    },
+    {
+      "id": "A8",
+      "counter": 1,
+      "key": 9,
+      "state": "KeyAhead",
+      "derived": {
+        "unrecorded": 8
+      },
+      "fatal": true,
+      "provenance": "MEASURED",
+      "note": "guardian/lib.rs:613 -- fsync lied or the order was inverted"
+    },
+    {
+      "id": "A9",
+      "counter": 3,
+      "key": 9,
+      "state": "KeyAhead",
+      "derived": {
+        "unrecorded": 6
+      },
+      "fatal": true,
+      "provenance": "MEASURED",
+      "note": "guardian/lib.rs:396"
+    },
+    {
+      "id": "A10",
+      "counter": 0,
+      "key": 1,
+      "state": "KeyAhead",
+      "derived": {
+        "unrecorded": 1
+      },
+      "fatal": true,
+      "provenance": "MEASURED",
+      "note": "counter at zero, key already used",
+      "resolved_in": "v0.2",
+      "source": "cmp gives Less; counter==0 gets no special treatment"
+    },
+    {
+      "id": "A11",
+      "counter": 1099511627775,
+      "key": 1099511627775,
+      "state": "InSync",
+      "derived": {
+        "index": 1099511627775
+      },
+      "fatal": false,
+      "provenance": "MEASURED",
+      "note": "upper edge h=40: 2^40-1",
+      "resolved_in": "v0.2",
+      "source": "general rule, no exhaustion variant"
+    },
+    {
+      "id": "A12",
+      "counter": 1099511627774,
+      "key": 1099511627775,
+      "state": "KeyAhead",
+      "derived": {
+        "unrecorded": 1
+      },
+      "fatal": true,
+      "provenance": "MEASURED",
+      "note": "overruns the edge by one",
+      "resolved_in": "v0.2",
+      "source": "general rule, no exhaustion variant"
+    }
+  ],
+  "index_read": [
+    {
+      "id": "B1",
+      "bytes_hex": "0000000001",
+      "value": 1,
+      "provenance": "MEASURED",
+      "offset": 4,
+      "width": 5,
+      "order": "big-endian"
+    },
+    {
+      "id": "B2",
+      "bytes_hex": "0000000100",
+      "value": 256,
+      "provenance": "MEASURED",
+      "offset": 4,
+      "width": 5,
+      "order": "big-endian"
+    },
+    {
+      "id": "B3",
+      "bytes_hex": "0000010000",
+      "value": 65536,
+      "provenance": "MEASURED",
+      "offset": 4,
+      "width": 5,
+      "order": "big-endian"
+    },
+    {
+      "id": "B4",
+      "bytes_hex": "0001000000",
+      "value": 16777216,
+      "provenance": "MEASURED",
+      "offset": 4,
+      "width": 5,
+      "order": "big-endian"
+    },
+    {
+      "id": "B5",
+      "bytes_hex": "0100000000",
+      "value": 4294967296,
+      "provenance": "MEASURED",
+      "offset": 4,
+      "width": 5,
+      "order": "big-endian"
+    },
+    {
+      "id": "B6",
+      "bytes_hex": "ffffffffff",
+      "value": 1099511627775,
+      "provenance": "MEASURED",
+      "offset": 4,
+      "width": 5,
+      "order": "big-endian"
+    }
+  ],
+  "out_of_field_write": [
+    {
+      "id": "B7",
+      "write": 1099511627776,
+      "error": "IndexOutOfField",
+      "error_fields": {
+        "index": 1099511627776,
+        "width": 5
+      },
+      "and_also": "not a single byte of the key material is modified",
+      "provenance": "MEASURED",
+      "note": "fail-closed: rejecting is not enough",
+      "bound": "the ceiling belongs to the FIELD: `width < 8 && index >= 1<<(8*width)`",
+      "valid_only_if": "h is a multiple of 8 (here h=40=8*5)"
+    }
+  ],
+  "candidates_without_vectors": [
+    {
+      "id": "B8",
+      "family": "B",
+      "what": "with h not a multiple of 8, writing 2^h must fail even though it fits in the field",
+      "example": "h=20 -> width 3 B: the field admits 2^24-1 while the tree has only 2^20 leaves",
+      "state": "CANDIDATE, unmeasured, and the originating implementation does NOT cover it"
+    },
+    {
+      "id": "C",
+      "family": "C",
+      "what": "the on-disk state before reading it",
+      "rows": [
+        "PermissionsTooOpen (checked ON READ)",
+        "FakePersistence (measures whether fsync costs anything)",
+        "Corrupt",
+        "UnexpectedLayout",
+        "SeedLength with looks_hex",
+        "SeedHexLength (CHARACTERS, not bytes: with integer division 193 said 96)",
+        "SeedNotHex"
+      ],
+      "state": "CANDIDATE"
+    }
+  ],
+  "unfalsified_deductions": [],
+  "deductions_resolved_in_0_2": [
+    "KeyAtZero wins over CounterAhead when key == 0",
+    "(0,0) is InSync and not KeyAtZero",
+    "indeterminate == counter (undecidable by vectors: with key==0 both formulas agree)",
+    "(0,1) is KeyAhead",
+    "the h=40 edge has no exhaustion variant of its own"
+  ],
+  "license": "CC0-1.0",
+  "changes_since_0_2": [
+    "the whole artifact is published in English: prose, wire contract and API",
+    "the verifier now ENFORCES N0: the v0.2 declared it and never asked for it",
+    "the subject protocol is written in the SPECIFICATION, not only in the tool",
+    "no vector moves: the rows and their MEASURED v0.2 provenance are untouched",
+    "PROVENANCE IS NOT TRANSLATED: the `source` and `note` fields point into the ARQUEO guardian, where the file and the functions carry their original Spanish names. Rewriting them would turn a real pointer into one that leads nowhere"
+  ]
+}

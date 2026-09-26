@@ -1,0 +1,25 @@
+[package]
+name = "hbs-state"
+version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+description = "Index guard for stateful hash-based signatures (XMSS/XMSS^MT): a monotonic counter persisted with fsync, detection of storage that does not actually persist, and reconciliation of the state after a restart. Reference implementation of HBS-STATE."
+keywords = ["xmss", "hash-based-signatures", "post-quantum", "state", "fsync"]
+categories = ["cryptography"]
+readme = "README.md"
+exclude = ["*.bak", "*.orig", "*.rej", "*~", "*.swp", "*.tmp"]
+repository = "https://github.com/atoranzo/hbs-state"
+authors = ["Angel Jose Toranzo Portela"]
+
+# WARNING: ZERO DEPENDENCIES, and that is this crate's main asset.
+# One file, eight bytes and an order. If a line ever appears below this
+# one, the promise is broken: think twice.
+[dependencies]
+
+# Not in dev either: the vector reader in `tests/vectors.rs` is written by
+# hand so that serde does not come in through the back door.
+[dev-dependencies]
+
+[[bin]]
+name = "hbs-state-subject"
+path = "src/bin/subject.rs"

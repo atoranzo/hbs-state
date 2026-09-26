@@ -1,0 +1,16 @@
+# Basura de compilacion.
+/target
+
+# Copias y residuos que dejan los bloques de esta linea de trabajo.
+# No son del crate: son del proceso que lo dejo como esta.
+.antes-de-*/
+.residuos-*/
+
+# Residuos de edicion. Un .bak junto al fichero bueno son dos productores
+# del mismo contrato, y uno de ellos es el viejo.
+*.bak
+*.orig
+*.rej
+*~
+*.swp
+*.tmp
