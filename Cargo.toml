@@ -1,6 +1,6 @@
 [package]
 name = "hbs-state"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 license = "MIT OR Apache-2.0"
 description = "Index guard for stateful hash-based signatures (XMSS/XMSS^MT): a monotonic counter persisted with fsync, detection of storage that does not actually persist, and reconciliation of the state after a restart. Reference implementation of HBS-STATE."

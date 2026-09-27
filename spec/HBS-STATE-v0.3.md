@@ -32,6 +32,25 @@ and that does not expire.
 
 ## 0. CORRECTIONS -- they are cited, not deleted
 
+### From the v0.3 as deposited: two claims a single implementation confirmed
+
+The v0.1.0 release of this crate, archived on 2026-09-26, carries the v0.3 as
+it stood that day. Two of its claims had been CONFIRMED against the only
+implementation there was -- the one this specification was extracted from --
+and a second implementer, measured on 2026-09-27, falsified both:
+
+- the reachability row for **persisted** subjects said that after a restart
+  such a subject reaches `InSync`, `CounterAhead` or `KeyAhead`. It also
+  reaches `KeyAtZero`: see section 1, where the row is corrected and the
+  counterexample is named.
+- section 6 presented the private key layout under the name of RFC 8391. No
+  document standardises that layout: the four sources are quoted verbatim in
+  that section, and the attribution is withdrawn.
+
+Neither correction moved a vector or a score. What they moved is what this
+document claims about the world, which is why the specification number does
+not change and the revision date does.
+
 ### From the v0.2: a level that was declared and never measured
 
 The v0.2 declared **N0** in its section 4 and wrote in its vectors file
@@ -400,12 +419,39 @@ without saying so would be arriving badly informed.
 
 ## 10. Status
 
-**v0.3 -- DRAFT.** Derived from **one single** implementation. The v0.1 had
-five unchecked claims and they are resolved; the v0.2 declared a level its
-own verifier did not measure, and from the v0.3 it measures it. What is
-still missing is the only thing that turns this into a standard: **a second
-INDEPENDENT subject measured against these vectors.** Until then it
-describes a programme.
+**v0.3 -- DRAFT, revised 2026-09-27.** Derived from **one single**
+implementation. The v0.1 had five unchecked claims and they are resolved;
+the v0.2 declared a level its own verifier did not measure, and from the
+v0.3 it measures it. What is still missing is the only thing that turns
+this into a standard: **a second INDEPENDENT subject measured against these
+vectors.** Until then it describes a programme. What the revision of
+2026-09-27 changed is listed in section 0; the archived v0.1.0 release
+carries the text as it stood before it.
+
+### An independent implementer, measured -- and what that is not
+
+A second **implementer** has been measured, and that is not a second
+**subject**. `hbs-lms` 0.2.0-alpha.1 (Fraunhofer AISEC, Apache-2.0, commit
+`7063cc8`) is another author, another scheme and another design language. It
+was measured on 2026-09-27 with a separate harness that links the library
+itself; it was **not** run through the subject protocol of section 4. It has
+not taken this exam, and no level is claimed for it.
+
+What it changed is listed in section 0: two claims of this document that a
+single implementation had confirmed, and that this one falsified. That is
+the finding, and it cuts both ways -- a specification derived from one
+implementation produces statements that look measured and are not.
+
+What it confirmed belongs here too, and is narrower. Its signing path
+increments the counter and calls the caller's persister before it returns a
+signature, so it cannot produce `KeyAhead` by itself. And durability is
+delegated to that persister, which the library cannot check: one that
+fsyncs and one that drops the bytes are indistinguishable to it. That gap
+is the one the fsync self-check of this bench exists to close.
+
+**Universe, in the same sentence:** the `hbs` query on crates.io returned 71
+results on 2026-09-27. Across both queries three sources have been opened, a
+fourth was measured yanked, and the rest remain unopened.
 
 ### The second subject: what is measured, with its universe in the same sentence
 
