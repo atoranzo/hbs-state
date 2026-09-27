@@ -85,13 +85,23 @@ reachable**:
 |---|---|---|
 | what is on disk | the key material with its index inside | only the seed |
 | on restart | the index survives | `from_seed` returns **index 0** |
-| after a restart | `InSync`, `CounterAhead` or `KeyAhead` | **always `KeyAtZero`** |
+| after a restart | `InSync`, `CounterAhead`, `KeyAhead` -- and `KeyAtZero` when the subject wipes the key on exhaustion | **always `KeyAtZero`** |
 | `CounterAhead` | the normal case after a crash | **INTRA-PROCESS only** |
 | example | RustCrypto's `xmss` serialises the state to the caller | the ARQUEO guard |
 
 MEASURED: *"The key comes from the seed and the counter says signing already
 happened. The SK is not persisted: on restart, `from_seed` returns it at
 ZERO."*
+
+MEASURED 2026-09-27, and it corrects the row above: a **persisted** subject
+also reaches `KeyAtZero`. `hbs-lms` 0.2.0-alpha.1 (Fraunhofer AISEC, commit
+`7063cc8`) wipes the private key when the tree is exhausted -- seed, parameter
+set and counter all go to zero -- so the index reads 0 while the operator's
+counter says signatures were issued. **A wiped key is terminal, not a
+restart**, and `KeyAtZero` does not distinguish them: the discriminator is the
+parameter set, which the index field does not carry. The earlier claim had been
+confirmed against a single implementation, the one this specification was
+extracted from.
 
 **Consequence for the bench:** a subject must DECLARE its model before
 running the vectors. The same `(counter, key)` pairs describe different

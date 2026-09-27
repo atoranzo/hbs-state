@@ -32,8 +32,10 @@
       "reachable_after_restart": [
         "InSync",
         "CounterAhead",
-        "KeyAhead"
+        "KeyAhead",
+        "KeyAtZero"
       ],
+      "note_v0_3_1": "KeyAtZero was listed as reachable only by seed-derived subjects until v0.3. MEASURED counterexample on 2026-09-27: hbs-lms 0.2.0-alpha.1 by Fraunhofer AISEC, commit 7063cc8, is a persisted subject, and when the tree is exhausted its increment calls wipe, which zeroes the seed, the parameter set and the counter. The index then reads 0 while the operator counter says signatures were issued, and the judge classifies that as KeyAtZero. The earlier claim had been confirmed against a single implementation: the one this specification was extracted from. A wiped key is terminal and not a restart, and the two are told apart by the parameter set, which the index field does not carry.",
       "example": "RustCrypto's xmss: serialises the state into the caller's bytes"
     },
     "seed_derived": {
