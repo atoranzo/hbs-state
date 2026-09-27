@@ -241,7 +241,7 @@ The five marked **v0.2** were DEDUCED in the v0.1 and are resolved.
 
 ---
 
-## 6. Family B -- reading the index out of the format (RFC 8391)
+## 6. Family B -- reading the index out of the private key layout
 
 `XMSSMT-SHA2_40/8_256` (id `0x00000005`, SP 800-208 table 11):
 **SK = 137 B = OID(4) + index(5, big-endian) + 4x32**. The width is
@@ -262,6 +262,45 @@ the SK is 136.
 | B7 | 2^40 | error `IndexOutOfField{index, width:5}` **and not one byte is touched** |
 
 B7 is a **fail-closed** vector: rejecting is not enough, you must not write.
+
+### What no document defines, and why it is the point
+
+The layout above is **not** standardised. Measured on the sources, verbatim:
+
+- RFC 8391 section 4.1.7: *"Note that we do not define any specific format
+  or handling for the XMSS private key SK."*
+- RFC 8391 section 4.2.2: *"This document does not define any specific
+  format for the XMSS^MT private key SK_MT as it is not required for
+  interoperability."*
+- RFC 8554 sections 4.2 and 5.2: *"The format of the LMS private key is an
+  internal matter to the implementation, and this document does not attempt
+  to define it."*
+- NIST SP 800-208 defines no private key byte layout either, and its section
+  8.1 says *"The cryptographic module shall not allow for the export of
+  private keying material."*
+
+So `OID(4) + index(5, big-endian) + 4x32` is the layout of ONE
+implementation, `xmss 0.1.0-pre.0`, MEASURED -- the same provenance every
+other figure in this document carries. It is **not** what RFC 8391 section
+4.1.3 describes: that passage lists what the key *contains*, including the
+2^h WOTS+ private keys, which this layout derives from the seed instead, and
+it places the algorithm OID in the PUBLIC key rather than the private one.
+
+**Consequence for scoring, declared and not yet implemented**: a subject that
+uses a different private key layout and fails family B is **not**
+non-conformant to RFC 8391. The runner builds a synthetic key in this layout
+and asks the subject to read it, so such a subject fails an exam it should
+not be sitting. Making family B conditional on a declared layout -- **not
+applicable** rather than failed, the same way N0 excuses the operational
+absence of a state -- is specified for the next revision. It is not done
+here.
+
+**And this is the finding, not the caveat.** The private key format is
+unspecified *because* SP 800-208 section 8.1 assumed the key never leaves the
+module. NIST is working on a revision that would enable key export. The day
+private keys start crossing boundaries, there is no standard format for them
+in any of the three documents, and therefore nothing to test an
+implementation against.
 
 ### BOUND on B7, measured in the v0.2
 

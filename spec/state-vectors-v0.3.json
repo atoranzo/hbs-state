@@ -17,6 +17,7 @@
     "len": 67,
     "sk_bytes": 137,
     "sk_layout": "OID(4) + index(width, big-endian) + 4*n",
+    "sk_layout_provenance": "MEASURED on xmss 0.1.0-pre.0. No document standardises it: RFC 8391 sections 4.1.7 and 4.2.2, RFC 8554 sections 4.2 and 5.2, and NIST SP 800-208 all decline to define a private key format, the last because its section 8.1 forbids export altogether. A subject that uses another layout and fails family B is not non-conformant to RFC 8391.",
     "index_width": 5,
     "index_width_formula": "ceil(h/8)",
     "max_index": 1099511627775

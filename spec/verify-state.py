@@ -260,7 +260,7 @@ def main():
     if a.only in ("B", "AB"):
         print()
         print("-" * 74)
-        print("FAMILY B -- reading the index out of the format (RFC 8391)")
+        print("FAMILY B -- reading the index out of the private key layout")
         print("-" * 74)
         oid = b"\x00\x00\x00\x05"
         padding = b"\x00" * (4 * ps["n"])
