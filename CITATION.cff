@@ -7,8 +7,8 @@ authors:
   - family-names: "Toranzo Portela"
     given-names: "Ángel José"
     orcid: "https://orcid.org/0009-0009-3199-1664"
-version: 0.2.0
-date-released: "2026-09-27"
+version: 0.2.1
+date-released: "2026-09-30"
 license:
   - MIT
   - Apache-2.0

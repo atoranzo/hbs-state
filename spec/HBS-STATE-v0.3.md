@@ -437,7 +437,8 @@ v0.3 it measures it. What is still missing is the only thing that turns
 this into a standard: **a second INDEPENDENT subject measured against these
 vectors.** Until then it describes a programme. What the revision of
 2026-09-27 changed is listed in section 0; the archived v0.1.0 release
-carries the text as it stood before it.
+carries the text as it stood before it; the archived v0.2.0 release still
+carries the provenance claim that section 0 withdraws.
 
 ### An independent implementer, measured -- and what that is not
 
