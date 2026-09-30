@@ -20,7 +20,7 @@ nine state-management strategies. **Not one of the nine ships a single
 executable vector**, and neither document offers anything with which an
 implementation can say whether its reconciliation is correct.
 
-**Provenance.** MEASURED = taken byte by byte from a production
+**Provenance.** MEASURED = taken byte by byte from the originating
 implementation (the ARQUEO index guard, XMSSMT-SHA2_40/8_256). DEDUCED =
 this document's inference. In the v0.2 **the five deductions of the v0.1
 were resolved against the source: all five CONFIRMED** (section 8). The v0.3
@@ -50,6 +50,17 @@ and a second implementer, measured on 2026-09-27, falsified both:
 Neither correction moved a vector or a score. What they moved is what this
 document claims about the world, which is why the specification number does
 not change and the revision date does.
+
+### From the revision of 2026-09-27: a provenance claim that was false
+
+The front page of the crate, `src/lib.rs` and the Provenance paragraph above
+said that the guard came from "a production system where it has been signing
+for a year". Measured against the ARQUEO record on 2026-09-30: the project's
+first session is dated 2026-07-29, XMSS entered its tree in August 2026, and
+ARQUEO describes itself as a research prototype with no real money and no
+external audit. The claim is withdrawn in the three places. "Originating
+implementation" now says all that was ever measured: which code the rows
+were taken from, not where it runs. No vector, score or label moves.
 
 ### From the v0.2: a level that was declared and never measured
 
@@ -419,7 +430,7 @@ without saying so would be arriving badly informed.
 
 ## 10. Status
 
-**v0.3 -- DRAFT, revised 2026-09-27.** Derived from **one single**
+**v0.3 -- DRAFT, revised 2026-09-30.** Derived from **one single**
 implementation. The v0.1 had five unchecked claims and they are resolved;
 the v0.2 declared a level its own verifier did not measure, and from the
 v0.3 it measures it. What is still missing is the only thing that turns

@@ -70,9 +70,9 @@
 //!
 //! ## WARNING: and this piece has no consumer yet
 //!
-//! This piece was extracted from a production system where it has been
-//! signing for a year. Here it travels ALONE, with its test bench, so that
-//! it can be measured against other implementations: see HBS-STATE.
+//! This piece was extracted from a research prototype where it has been
+//! signing since August 2026 (it said "production ... for a year": false,
+//! withdrawn 2026-09-30). It travels ALONE, with its bench: see HBS-STATE.
 //!
 //! (Until this revision the line above published a test count. It said 26
 //! and there were 27: a figure on the crate's front page that nothing

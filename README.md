@@ -31,8 +31,9 @@ implementation can say whether its reconciliation is correct. That is what
 HBS-STATE is: not a post-quantum library, but the bench for the state.
 
 This crate is that operational knowledge **in code, extracted from a
-production system where it has been signing for a year**, with the vector
-bench that `spec/` defines and `tests/vectors.rs` executes.
+single-operator research prototype where it has been signing since August
+2026**, with the vector bench that `spec/` defines and `tests/vectors.rs`
+executes.
 
 ## Zero dependencies
 
@@ -167,8 +168,16 @@ author's continuation, **no longer carries** that defect.
 ## Provenance
 
 Extracted from [ARQUEO][arqueo] (open conservation proofs for closed
-ledgers), where the state guard has been in production for a year. This
+ledgers), a single-operator research prototype -- no real money, no external
+audit -- where the state guard has been signing since August 2026. This
 crate is that piece, relabelled to the domain and with no dependencies.
+
+(Until 2026-09-30 this section, the front page, `src/lib.rs` and the
+specification said "in production for a year". Measured against the ARQUEO
+record: the project's first session is dated 2026-07-29, XMSS entered its
+tree in August 2026, and ARQUEO describes itself as a research prototype
+with no real money and no external audit. The claim was false and is
+withdrawn, cited here rather than deleted.)
 
 `src/lib.rs`: 823 file lines, 505 with code. The method: line comments and
 nested block comments, strings with escapes, raw strings `r#"..."#` and
