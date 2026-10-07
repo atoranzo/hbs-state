@@ -62,6 +62,20 @@ external audit. The claim is withdrawn in the three places. "Originating
 implementation" now says all that was ever measured: which code the rows
 were taken from, not where it runs. No vector, score or label moves.
 
+### From the v0.3 until 2026-09-30: an upstream issue cited for more than it says
+
+Section 9 said, right after its measured scope, "Published as
+`RustCrypto/signatures` issue 1442", and the front page said "Reported in"
+the same issue. Read on 2026-10-07: the issue was opened by the GitHub
+account `joshhh7` on 2026-09-10; as opened, it describes the mechanism for
+verifying keys imported from bytes, gives no count of affected parameter sets
+and says nothing of signing keys. "Published as" said that this section's
+finding, scope included, was what the issue published, and it is not. Both
+sentences also read as this document's author's own report: he did not file
+the issue. The two sentences are withdrawn and replaced by what the issue
+says, who opened it and when. The tagged releases v0.1.0, v0.2.0 and v0.2.1
+keep the earlier wording. No vector, score or label moves.
+
 ### From the v0.2: a level that was declared and never measured
 
 The v0.2 declared **N0** in its section 4 and wrote in its vectors file
@@ -414,7 +428,12 @@ bytes on their own are ambiguous. Single-tree is tried first; when the raw
 OID of a multi-tree key also names a single-tree parameter set, the
 `try_from` succeeds, the `or_else` is never reached, and the load fails
 against `expected_oid`. **Measured scope: 21 of the 56 XMSSMT parameter
-sets.** Published as `RustCrypto/signatures` issue 1442.
+sets.** The mechanism is reported upstream as `RustCrypto/signatures` issue
+1442, opened by the GitHub account `joshhh7`, not by this document's author,
+on 2026-09-10; read on 2026-10-07, it was still open and unanswered. The
+issue, as opened, covers verifying keys imported from bytes and gives no
+count: the measured scope above, and what the defect does to a persisted
+signing key, are this document's.
 
 This **does not invalidate the specification**: it bounds it. The section 5
 vectors are a pure function of `(counter, key)` and never touch that path.
@@ -430,7 +449,7 @@ without saying so would be arriving badly informed.
 
 ## 10. Status
 
-**v0.3 -- DRAFT, revised 2026-09-30.** Derived from **one single**
+**v0.3 -- DRAFT, revised 2026-10-07.** Derived from **one single**
 implementation. The v0.1 had five unchecked claims and they are resolved;
 the v0.2 declared a level its own verifier did not measure, and from the
 v0.3 it measures it. What is still missing is the only thing that turns

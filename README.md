@@ -157,13 +157,23 @@ and this crate **does not cover yet**.
 The **persisted SK** branch of the specification cannot be exercised
 end-to-end against the Rust library available today: `xmss` resolves the OID
 by trying single-tree first, and 21 of the 56 XMSSMT parameter sets load
-wrongly because of it. Reported in
-[RustCrypto/signatures#1442](https://github.com/RustCrypto/signatures/issues/1442).
+wrongly because of it. The mechanism is reported upstream in
+[RustCrypto/signatures#1442](https://github.com/RustCrypto/signatures/issues/1442),
+opened by the GitHub account `joshhh7`, not by this crate's author, on
+2026-09-10; read on 2026-10-07, it was still open and unanswered. The issue,
+as opened, covers verifying keys imported from bytes and gives no count: the
+21 of 56 and what the defect does to a persisted signing key are this
+crate's.
 
 It does not invalidate anything here -- the family A vectors are a pure
 function of `(counter, key)` and never touch that path -- but it is declared
 rather than hidden. And it must be said in full: `pq-xmss`, the same
 author's continuation, **no longer carries** that defect.
+
+(Until 2026-10-07 the first paragraph of this section said "Reported in" the
+issue right after the count, which read as if the issue carried the count and
+as if this crate's author had filed it. Neither is so. Section 0 of the
+specification says what changed; cited here rather than deleted.)
 
 ## Provenance
 
